@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use PharTool\Command\PharToolCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application('PHAR Tool', '1.0.0');
+$application->add(new PharToolCommand());
+$application->run();
