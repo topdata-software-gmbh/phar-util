@@ -15,12 +15,12 @@ class DefaultPharConfig implements PharConfig
 
     public function getCompressionType(): int
     {
-        return Phar::GZ;
+        return Phar::NONE;
     }
 
     public function getSignatureAlgorithm(): int
     {
-        return Phar::SHA1;
+        return Phar::SHA256;
     }
 
     public function isVerbose(): bool
