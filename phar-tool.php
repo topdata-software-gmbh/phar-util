@@ -1,6 +1,15 @@
 #!/usr/bin/env php
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php';
+
+use PharTool\Config\DefaultPharConfig;
+use PharTool\Service\PharAnalyzer;
+use PharTool\Exception\PharToolException;
+
+/**
+ * Main class for handling PHAR operations
+ */
 class PharTool
 {
     private $operation;
