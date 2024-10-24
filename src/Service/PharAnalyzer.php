@@ -16,11 +16,6 @@ class PharAnalyzer
             $phar = new Phar($pharPath);
             $metadata = $phar->getMetadata();
 
-            echo "\nAnalyzing PHAR:\n";
-            echo "Size: " . $this->_formatBytes(filesize($pharPath)) . "\n";
-            echo "Files: " . count($phar) . "\n";
-            echo "Compression: ";
-
             $compressionInfo = [];
             foreach ($phar as $file) {
                 if ($file->isCompressed()) {
@@ -35,14 +30,11 @@ class PharAnalyzer
                 }
             }
 
-            foreach ($compressionInfo as $type => $count) {
-                echo "$type: $count files, ";
-            }
-            echo "\n";
-
             return [
                 'metadata' => $metadata,
-                'compression' => $compressionInfo
+                'compression' => $compressionInfo,
+                'size' => $this->_formatBytes(filesize($pharPath)),
+                'files' => count($phar)
             ];
         } catch (\Exception $e) {
             throw new PharToolException("Could not analyze PHAR: " . $e->getMessage());
