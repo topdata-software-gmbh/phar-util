@@ -1,10 +1,10 @@
 <?php
 
-namespace PharTool\Config;
+namespace App\Config;
 
 use Phar;
 
-class DefaultPharConfig implements PharConfig
+class DefaultPharConfig
 {
     private bool $verbose;
 

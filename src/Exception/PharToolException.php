@@ -1,6 +1,6 @@
 <?php
 
-namespace PharTool\Exception;
+namespace App\Exception;
 
 class PharToolException extends \Exception
 {

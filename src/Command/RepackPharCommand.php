@@ -1,9 +1,9 @@
 <?php
 
-namespace PharTool\Command;
+namespace App\Command;
 
-use PharTool\Exception\PharToolException;
-use PharTool\Service\PharAnalyzer;
+use App\Exception\PharToolException;
+use App\Service\PharAnalyzer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

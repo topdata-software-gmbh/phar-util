@@ -1,7 +1,8 @@
 <?php
 
-namespace PharTool\Command;
+namespace App\Command;
 
+use App\Service\PharAnalyzer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,6 +10,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class AnalyzePharCommand extends Command
 {
+    private PharAnalyzer $pharAnalyzer;
+
+    public function __construct(PharAnalyzer $pharAnalyzer)
+    {
+        parent::__construct();
+        $this->pharAnalyzer = $pharAnalyzer;
+    }
+
     protected function configure()
     {
         $this
@@ -31,48 +40,14 @@ class AnalyzePharCommand extends Command
         }
 
         try {
-            $phar = new \Phar($pharPath);
-            $metadata = $phar->getMetadata();
-            
-            $output->writeln("<info>PHAR Analysis for: {$pharPath}</info>");
-            $output->writeln("Signature: " . $phar->getSignature()['hash_type']);
-            $output->writeln("Compression: " . $this->getCompressionName($phar->getDefaultStub()));
-            $output->writeln("File count: " . count($phar));
-            $output->writeln("Total size: " . $this->formatBytes($this->getTotalSize($phar)));
-            
+            $analysis = $this->pharAnalyzer->analyzePhar($pharPath);
+            dump($analysis);
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $output->writeln("<error>Error analyzing PHAR: " . $e->getMessage() . "</error>");
+
             return Command::FAILURE;
         }
-    }
-
-    private function getCompressionName($stub): string 
-    {
-        if (strpos($stub, 'GBMB') !== false) {
-            return 'BZ2';
-        } elseif (strpos($stub, 'GZ') !== false) {
-            return 'GZ';
-        }
-        return 'None';
-    }
-
-    private function getTotalSize(\Phar $phar): int
-    {
-        $size = 0;
-        foreach ($phar as $file) {
-            $size += $file->getSize();
-        }
-        return $size;
-    }
-
-    private function formatBytes(int $bytes, int $precision = 2): string
-    {
-        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-        $pow = min($pow, count($units) - 1);
-        $bytes /= pow(1024, $pow);
-        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 }

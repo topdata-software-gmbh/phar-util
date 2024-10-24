@@ -1,8 +1,8 @@
 <?php
 
-namespace PharTool\Service;
+namespace App\Service;
 
-use PharTool\Exception\PharToolException;
+use App\Exception\PharToolException;
 use Phar;
 
 class PharAnalyzer
@@ -15,9 +15,10 @@ class PharAnalyzer
         try {
             $phar = new Phar($pharPath);
             $metadata = $phar->getMetadata();
-
             $compressionInfo = [];
+            $phar->rewind();
             foreach ($phar as $file) {
+//                dump($file);
                 if ($file->isCompressed()) {
                     if ($file->isCompressed(Phar::BZ2)) {
                         $compressionInfo['BZ2'] = ($compressionInfo['BZ2'] ?? 0) + 1;
@@ -31,10 +32,10 @@ class PharAnalyzer
             }
 
             return [
-                'metadata' => $metadata,
+                'metadata'    => $metadata,
                 'compression' => $compressionInfo,
-                'size' => $this->_formatBytes(filesize($pharPath)),
-                'files' => count($phar)
+                'size'        => $this->_formatBytes(filesize($pharPath)),
+                'files'       => count($phar)
             ];
         } catch (\Exception $e) {
             throw new PharToolException("Could not analyze PHAR: " . $e->getMessage());

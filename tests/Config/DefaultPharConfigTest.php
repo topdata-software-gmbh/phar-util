@@ -1,10 +1,10 @@
 <?php
 
-namespace PharTool\Tests\Config;
+namespace App\Tests\Config;
 
-use PHPUnit\Framework\TestCase;
-use PharTool\Config\DefaultPharConfig;
+use App\Config\DefaultPharConfig;
 use Phar;
+use PHPUnit\Framework\TestCase;
 
 class DefaultPharConfigTest extends TestCase
 {
